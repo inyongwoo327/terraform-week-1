@@ -25,41 +25,7 @@ data "aws_vpc" "default_vpc" {
   default = true
 }
 
-# Get latest Ubuntu Linux Disco 20.04 AMI
-data "aws_ami" "ubuntu-linux-2004" {
-  most_recent = true
-  owners      = ["099720109477"] # Canonical
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
 
-resource "aws_instance" "instance_1" {
-  ami             = data.aws_ami.ubuntu-linux-2004.id # Ubuntu 20.04 LTS // us-east-1
-  instance_type   = "t2.micro"
-  security_groups = [aws_security_group.instances.name]
-  user_data       = <<-EOF
-              #!/bin/bash
-              echo "Hello, World 1" > index.html
-              python3 -m http.server 8080 &
-              EOF
-}
-
-resource "aws_instance" "instance_2" {
-  ami             = data.aws_ami.ubuntu-linux-2004.id # Ubuntu 20.04 LTS // us-east-1
-  instance_type   = "t2.micro"
-  security_groups = [aws_security_group.instances.name]
-  user_data       = <<-EOF
-              #!/bin/bash
-              echo "Hello, World 2" > index.html
-              python3 -m http.server 8080 &
-              EOF
-}
 
 data "aws_subnet_ids" "default_subnet" {
   vpc_id = data.aws_vpc.default_vpc.id
@@ -189,15 +155,3 @@ resource "aws_route53_record" "root" {
   }
 }
 
-resource "aws_db_instance" "db_instance" {
-  allocated_storage = 20
-  auto_minor_version_upgrade = true
-  storage_type = "standard"
-  engine = "postgres"
-  engine_version = "12"
-  instance_class = "db.t3.micro"
-  name = "mydb"
-  username = "foo"
-  password = "foobarbaz"
-  skip_final_snapshot = true
-}
