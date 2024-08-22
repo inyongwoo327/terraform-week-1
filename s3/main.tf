@@ -56,7 +56,9 @@ terraform {
   }
 }
 */
-
+module "consul" {
+  source = "git::ssh://git@github.com/hashicorp/terraform-aws-consul.git"
+}
 
 
 
