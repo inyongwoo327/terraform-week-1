@@ -14,7 +14,7 @@ data "aws_ami" "ubuntu-linux-2004" {
 
 resource "aws_instance" "instance_1" {
   ami             = data.aws_ami.ubuntu-linux-2004.id # Ubuntu 20.04 LTS // us-east-1
-  instance_type   = "t2.micro"
+  instance_type   = var.instance_type
   security_groups = [aws_security_group.instances.name]
   user_data       = <<-EOF
               #!/bin/bash
@@ -25,7 +25,7 @@ resource "aws_instance" "instance_1" {
 
 resource "aws_instance" "instance_2" {
   ami             = data.aws_ami.ubuntu-linux-2004.id # Ubuntu 20.04 LTS // us-east-1
-  instance_type   = "t2.micro"
+  instance_type   = var.instance_type
   security_groups = [aws_security_group.instances.name]
   user_data       = <<-EOF
               #!/bin/bash
